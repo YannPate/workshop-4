@@ -7,6 +7,10 @@ export type SendMessageBody = {
   destinationUserId: number;
 };
 
+// Variables globales pour stocker les messages
+let lastReceivedMessage: string | null = null;
+let lastSentMessage: string | null = null;
+
 export async function user(userId: number) {
   const _user = express();
   _user.use(express.json());
@@ -15,6 +19,16 @@ export async function user(userId: number) {
   // Implémentation de la route /status
   _user.get("/status", (req, res) => {
     res.send("live");
+  });
+
+  // Implémentation de /getLastReceivedMessage
+  _user.get("/getLastReceivedMessage", (req, res) => {
+    res.json({ result: lastReceivedMessage });
+  });
+
+  // Implémentation de /getLastSentMessage
+  _user.get("/getLastSentMessage", (req, res) => {
+    res.json({ result: lastSentMessage });
   });
 
   const server = _user.listen(BASE_USER_PORT + userId, () => {
